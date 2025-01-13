@@ -4,9 +4,10 @@
 ![Compatibility](https://img.shields.io/badge/Compatibility-VCL,%20Firemonkey%20DataSnap%20and%20uniGUI-brightgreen.svg)
 
 ## Pré-requisitos
- * `[Obrigatório]` Necessário instalar componente ViaCEP, contigo na pasta ComponenteViaCEP.
+ * `[Obrigatório]` Necessário instalar componente ViaCEP, contido na pasta ComponenteViaCEP.
  * Adicionar ao Library Path do Delphi o caminho do componente ViaCEP
  * Possuir as dlls **libeay32.dll** e **ssleay32.dll** na pasta do projeto junto ao executável.
+ * Disponibilizados os arquivos binários dentro da pasta **bin**
  
 
 ## Banco de Dados
