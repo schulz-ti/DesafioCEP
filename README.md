@@ -12,6 +12,9 @@
 ## Apresentação
 O objetivo do projeto é demonstrar habilidades com a linguagem Delphi, padrões de projetos e arquitetura de software. 
 
+> [!IMPORTANT]
+> Para ajustar o caminho da base de dados ao projeto, bem como usuário e senha de acesso modifique o arquivo conexao. Utilize o objeto Config e métodos Database, Username e Password respectivamente para informar os dados.
+
 ## Padrões e Metodologias Adotadas no Projeto
  * Clean Code
  * SOLID
