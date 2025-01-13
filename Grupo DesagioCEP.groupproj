@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{6BF1DC56-3182-471E-A330-E5920B59F6D5}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="DesafioCEP.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ComponenetViaCEP\ViaCEP.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="DesafioCEP">
+        <MSBuild Projects="DesafioCEP.dproj"/>
+    </Target>
+    <Target Name="DesafioCEP:Clean">
+        <MSBuild Projects="DesafioCEP.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DesafioCEP:Make">
+        <MSBuild Projects="DesafioCEP.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ViaCEP">
+        <MSBuild Projects="ComponenetViaCEP\ViaCEP.dproj"/>
+    </Target>
+    <Target Name="ViaCEP:Clean">
+        <MSBuild Projects="ComponenetViaCEP\ViaCEP.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ViaCEP:Make">
+        <MSBuild Projects="ComponenetViaCEP\ViaCEP.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="DesafioCEP;ViaCEP"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="DesafioCEP:Clean;ViaCEP:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="DesafioCEP:Make;ViaCEP:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
