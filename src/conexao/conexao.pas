@@ -23,11 +23,18 @@ type
 
 implementation
 
+uses
+  Vcl.Forms;
+
 { TConexao }
 
 constructor TConexao.Create;
 begin
   Config := TConfigConexao.Create(nil);
+
+  Config.Database( ExtractFilePath(Application.ExeName) + 'data\desafiocep.fdb' );
+  Config.Username( 'SYSDBA' );
+  Config.Password( 'masterkey' );
 end;
 
 function TConexao.GetConexao: TFDConnection;

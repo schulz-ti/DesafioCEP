@@ -18,7 +18,9 @@ type
   private
     { Private declarations }
   public
-    { Public declarations }
+    procedure Database(value: string);
+    procedure Username(value: string);
+    procedure Password(value: string);
   end;
 
 var
@@ -26,19 +28,28 @@ var
 
 implementation
 
-uses
-  Vcl.Forms;
-
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
 
+procedure TConfigConexao.Database(value: string);
+begin
+  FDConexao.Params.Database := value;
+end;
+
 procedure TConfigConexao.DataModuleCreate(Sender: TObject);
 begin
   FDConexao.Connected := False;
-  FDConexao.Params.Database := ExtractFilePath(Application.ExeName) + 'data\desafiocep.fdb';
-  FDConexao.Params.UserName := 'SYSDBA';
-  FDConexao.Params.Password := 'masterkey';
+end;
+
+procedure TConfigConexao.Password(value: string);
+begin
+  FDConexao.Params.Password := value;
+end;
+
+procedure TConfigConexao.Username(value: string);
+begin
+  FDConexao.Params.UserName := value;
 end;
 
 end.
