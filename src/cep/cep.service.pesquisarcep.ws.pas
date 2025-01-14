@@ -100,7 +100,6 @@ end;
 function TCEPServicePesquisarCEPWS.Pesquisar: Boolean;
 var
   _viaCEP : TViaCEP;
-  _data : TViaCEPData;
   _posicao : Integer;
 begin
   Result := False;
@@ -111,24 +110,21 @@ begin
     _viaCEP.TipoChave    := tcCEP;
     _viaCEP.CEP          := FCep.Replace('-', '');
 
+    FCEPModel
+      .Clear;
+
     if _viaCEP.Execute then
     begin
-      for _posicao := 0 to Pred(_viaCEP.Lista.Count) do
-      begin
-        _data := _viaCEP.Lista[_posicao];
+      Result := (not _viaCEP.Resultado.Cep.IsEmpty);
 
-        Result := (not _data.Cep.IsEmpty);
-
-        FCEPModel
-          .Cep( _data.Cep )
-          .UF( _data.Uf )
-          .Localidade( _data.Localidade )
-          .Logradouro( _data.Logradouro )
-          .Bairro( _data.Bairro )
-          .Complemento( _data.Complemento )
-          .LimparTmp
-          .Gravar;
-      end;
+      FCEPModel
+        .Cep( _viaCEP.Resultado.Cep )
+        .UF( _viaCEP.Resultado.Uf )
+        .Localidade( _viaCEP.Resultado.Localidade )
+        .Logradouro( _viaCEP.Resultado.Logradouro )
+        .Bairro( _viaCEP.Resultado.Bairro )
+        .Complemento( _viaCEP.Resultado.Complemento )
+        .Gravar;
     end;
   finally
     _viaCEP.Free;

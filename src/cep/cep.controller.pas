@@ -29,6 +29,8 @@ type
     constructor Create;
   private
     function RemoverAcentuacao(str: string): string;
+    procedure ValidarCep;
+    procedure ValidarEnderecoCompleto;
   public
     destructor Destroy; override;
 
@@ -110,6 +112,12 @@ begin
 
   Result := False;
 
+  if FTipoChave = tCEP then
+    ValidarCep
+  else
+    ValidarEnderecoCompleto;
+
+
   _mensagemConfirmacao := 'Encontrado o endereço na base de dados. Deseja exibi-lo ou atualizar os dados através do WS?'
     + #13 + 'Click em Sim para atualizar e Não para utilizar o endereço da base de dados.';
 
@@ -183,6 +191,24 @@ function TCEPController.UF(value: string): ICEPController;
 begin
   Result := Self;
   FUf := value;
+end;
+
+procedure TCEPController.ValidarCep;
+begin
+  if Length(Trim(FCep)) < 9 then
+    raise Exception.Create('CEP inválido para pesquisa.');
+end;
+
+procedure TCEPController.ValidarEnderecoCompleto;
+begin
+  if Length(Trim(FUF)) < 2 then
+    raise Exception.Create('UF inválido para pesquisa.')
+
+  else if Length(Trim(FLocalidade)) < 3 then
+    raise Exception.Create('Localidade inválida para pesquisa.')
+
+  else if Length(Trim(FLogradouro)) < 3 then
+    raise Exception.Create('Logradouro inválido para pesquisa.');
 end;
 
 end.

@@ -54,9 +54,9 @@ type
     function Logradouro:string; overload;
     function PesquisarCEP:ICEPModel;
     function PesquisarEnderecoCompleto:ICEPModel;
+    function Clear:ICEPModel;
     function Found: Boolean;
     function Gravar: Boolean;
-    function LImparTmp:ICEPModel;
   end;
 
 
@@ -79,6 +79,12 @@ end;
 function TCEPModel.Cep: string;
 begin
   Result := FCep;
+end;
+
+function TCEPModel.Clear: ICEPModel;
+begin
+  Result := Self;
+  LimparCampos;
 end;
 
 function TCEPModel.Codigo: string;
@@ -202,8 +208,6 @@ function TCEPModel.PesquisarCEP: ICEPModel;
 begin
   Result := Self;
 
-  LImparTmp;
-
   FFound := PesquisarCEPData;
 
 end;
@@ -246,8 +250,6 @@ end;
 function TCEPModel.PesquisarEnderecoCompleto: ICEPModel;
 begin
   Result := Self;
-
-  LImparTmp;
 
   FFound := PesquisarEnderecoCompletoData;
 
@@ -315,11 +317,6 @@ begin
   FLogradouro  := '';
   FComplemento := '';
   FBairro      := '';
-end;
-
-function TCEPModel.LImparTmp: ICEPModel;
-begin
-  Result := Self;
 
   with FModelData do
   begin
@@ -327,6 +324,7 @@ begin
     tmpCep.CreateDataSet;
     tmpCep.Open;
   end;
+
 end;
 
 function TCEPModel.Localidade: string;

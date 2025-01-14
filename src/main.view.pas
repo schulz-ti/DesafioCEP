@@ -42,9 +42,6 @@ type
     FCepController : ICEPController;
 
     procedure ConfigurarPesquisa(pPesquisarPorCep : Boolean);
-
-    function ValidarCep:Boolean;
-    function ValidarEnderecoCompleto:Boolean;
   public
     procedure PesquisarCEP;
     procedure PesquisarEnderecoCompleto;
@@ -93,9 +90,6 @@ end;
 
 procedure TfrmDesafioCep.PesquisarCEP;
 begin
-  if not ValidarCep then
-    Exit;
-
   if not
     FCepController
       .TipoPesquisa( TTipoPesquisaEnu(rgTipoRetorno.ItemIndex) )
@@ -108,9 +102,6 @@ end;
 
 procedure TfrmDesafioCep.PesquisarEnderecoCompleto;
 begin
-  if not ValidarEnderecoCompleto then
-    Exit;
-
   if not
     FCepController
       .TipoPesquisa( TTipoPesquisaEnu(rgTipoRetorno.ItemIndex) )
@@ -126,30 +117,6 @@ end;
 procedure TfrmDesafioCep.rbPesquisarCEPClick(Sender: TObject);
 begin
   ConfigurarPesquisa(rbPesquisarCEP.Checked);
-end;
-
-function TfrmDesafioCep.ValidarCep: Boolean;
-begin
-  Result := False;
-
-  if Length(Trim(CEP.Text)) < 9 then
-    ShowMessage('CEP inválido para pesquisa.')
-  else
-    Result := True;
-end;
-
-function TfrmDesafioCep.ValidarEnderecoCompleto: Boolean;
-begin
-  Result := False;
-
-  if Length(Trim(UF.Text)) < 2 then
-    ShowMessage('UF inválido para pesquisa.')
-  else if Length(Trim(Localidade.Text)) < 3 then
-    ShowMessage('Localidade inválida para pesquisa.')
-  else if Length(Trim(Logradouro.Text)) < 3 then
-    ShowMessage('Logradouro inválido para pesquisa.')
-  else
-    Result := True;
 end;
 
 end.

@@ -34,13 +34,19 @@ requires
   IndyProtocols,
   IndyCore,
   RESTComponents,
-  xmlrtl;
+  xmlrtl,
+  vcl,
+  vcldb,
+  FireDAC,
+  FireDACCommonDriver,
+  FireDACCommon;
 
 contains
   core.viacep in 'core.viacep.pas',
   core.viacep.data in 'core.viacep.data.pas',
   core.viacep.interfaces in 'core.viacep.interfaces.pas',
   core.viacep.json in 'core.viacep.json.pas',
-  core.viacep.xml in 'core.viacep.xml.pas';
+  core.viacep.xml in 'core.viacep.xml.pas',
+  core.viacep.view in 'core.viacep.view.pas' {frmViaCEPView};
 
 end.

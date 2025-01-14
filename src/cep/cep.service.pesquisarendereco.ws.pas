@@ -100,7 +100,6 @@ end;
 function TCEPServicePesquisarEnderecoWS.Pesquisar: Boolean;
 var
   _viaCEP : TViaCEP;
-  _data : TViaCEPData;
   _posicao : Integer;
   _localidade, _logradouro : string;
 begin
@@ -117,25 +116,21 @@ begin
     _viaCEP.Localidade   := _localidade;
     _viaCEP.Logradouro   := _logradouro;
 
+    FCEPModel
+      .Clear;
+
     if _viaCEP.Execute then
     begin
-      FCEPModel.LimparTmp;
+      Result := (not _viaCEP.Resultado.Cep.IsEmpty);
 
-      for _posicao := 0 to Pred(_viaCEP.Lista.Count) do
-      begin
-        _data := _viaCEP.Lista[_posicao];
-
-        Result := (not _data.Cep.IsEmpty);
-
-        FCEPModel
-          .Cep( _data.Cep )
-          .UF( _data.Uf )
-          .Localidade( _data.Localidade )
-          .Logradouro( _data.Logradouro )
-          .Bairro( _data.Bairro )
-          .Complemento( _data.Complemento )
-          .Gravar;
-      end;
+      FCEPModel
+        .Cep( _viaCEP.Resultado.Cep )
+        .UF( _viaCEP.Resultado.Uf )
+        .Localidade( _viaCEP.Resultado.Localidade )
+        .Logradouro( _viaCEP.Resultado.Logradouro )
+        .Bairro( _viaCEP.Resultado.Bairro )
+        .Complemento( _viaCEP.Resultado.Complemento )
+        .Gravar;
     end;
   finally
     _viaCEP.Free;

@@ -32,6 +32,9 @@ type
     FListaViaCEPData: TListaViaCEPData;
     FTipoPesquisa: TTipoPesquisa;
     FTipoChave: TTipoChave;
+    FResultadoData : TViaCEPData;
+    procedure CopiarDataLista(pLista: TListaViaCEPData; pResultado: TViaCEPData);
+    procedure CopiarData(pOrigem: TViaCEPData; pResultado: TViaCEPData);
   public
     constructor Create(Aowner : TComponent); override;
     destructor Destroy; override;
@@ -44,8 +47,7 @@ type
     property UF : string read FUf write FUf;
     property Localidade : string read FLocalidade write FLocalidade;
     property Logradouro : string read FLogradouro write FLogradouro;
-
-    function Lista:TListaViaCEPData;
+    property Resultado : TViaCEPData read FResultadoData write FResultadoData;
   end;
 
 procedure Register;
@@ -54,7 +56,8 @@ implementation
 
 uses
   core.viacep.json,
-  core.viacep.xml;
+  core.viacep.xml,
+  core.viacep.view;
 
 procedure Register;
 begin
@@ -62,6 +65,27 @@ begin
 end;
 
 { TViaCEP }
+
+procedure TViaCEP.CopiarData(pOrigem, pResultado: TViaCEPData);
+begin
+  FResultadoData.CEP         := pOrigem.CEP;
+  FResultadoData.UF          := pOrigem.UF;
+  FResultadoData.Localidade  := pOrigem.Localidade;
+  FResultadoData.Logradouro  := pOrigem.Logradouro;
+  FResultadoData.Complemento := pOrigem.Complemento;
+  FResultadoData.Bairro      := pOrigem.Bairro;
+end;
+
+procedure TViaCEP.CopiarDataLista(pLista: TListaViaCEPData;
+  pResultado: TViaCEPData);
+begin
+  FResultadoData.CEP         := FListaViaCEPData[0].CEP;
+  FResultadoData.UF          := FListaViaCEPData[0].UF;
+  FResultadoData.Localidade  := FListaViaCEPData[0].Localidade;
+  FResultadoData.Logradouro  := FListaViaCEPData[0].Logradouro;
+  FResultadoData.Complemento := FListaViaCEPData[0].Complemento;
+  FResultadoData.Bairro      := FListaViaCEPData[0].Bairro;
+end;
 
 constructor TViaCEP.Create(Aowner: TComponent);
 begin
@@ -75,6 +99,8 @@ begin
   FIdSSLIOHandlerSocketOpenSSL.SSLOptions.SSLVersions := [sslvTLSv1, sslvTLSv1_1, sslvTLSv1_2];
 
   FListaViaCEPData := TList<TViaCEPData>.Create;
+
+  FResultadoData := TViaCEPData.Create;
 
   FTipoPesquisa := tpJSON;
 
@@ -92,14 +118,18 @@ begin
   FIdSSLIOHandlerSocketOpenSSL.Free;
   FIdHTTP.Free;
   FListaViaCEPData.Free;
+  FResultadoData.Free;
   inherited;
 end;
 
 function TViaCEP.Execute: Boolean;
 var
   _service : IViaCEPService;
+  _enderecoEncontrado : Boolean;
 begin
   Result := False;
+
+  _enderecoEncontrado := False;
 
   if FTipoPesquisa = tpJSON then
     _service := TViaCEPServiceJSON.New
@@ -107,7 +137,7 @@ begin
   else if FTipoPesquisa = tpXML then
     _service := TViaCEPServiceXML.New;
 
-  Result :=
+  _enderecoEncontrado:=
     _service
       .TipoChave(FTipoChave)
       .Data(FListaViaCEPData)
@@ -116,11 +146,31 @@ begin
       .Localidade(FLocalidade)
       .Logradouro(FLogradouro)
       .Execute;
-end;
 
-function TViaCEP.Lista: TListaViaCEPData;
-begin
-  Result := FListaViaCEPData;
+  if _enderecoEncontrado then
+  begin
+    if FListaViaCEPData.Count > 1 then
+      begin
+        try
+          frmViaCEPView := TfrmViaCEPView.Create(nil);
+          frmViaCEPView.Lista(FListaViaCEPData);
+
+          if frmViaCEPView.Execute then
+            CopiarData(frmViaCEPView.Data,  FResultadoData)
+          else
+            _enderecoEncontrado := False;
+        finally
+          frmViaCEPView.Free;
+        end;
+      end
+    else
+      begin
+        CopiarDataLista(FListaViaCEPData, FResultadoData);
+      end;
+  end;
+
+  Result := _enderecoEncontrado;
+
 end;
 
 end.

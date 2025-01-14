@@ -22,9 +22,9 @@ type
     function Logradouro:string; overload;
     function PesquisarCEP:ICEPModel;
     function PesquisarEnderecoCompleto:ICEPModel;
+    function Clear:ICEPModel;
     function Found: Boolean;
     function Gravar: Boolean;
-    function LImparTmp:ICEPModel;
   end;
 
 implementation
